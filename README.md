@@ -1,4 +1,4 @@
-#Ansible Role: PHP Brotli Extension#
+# Ansible Role: PHP Brotli Extension
 
 Build and install the latest version of the
 [PHP Brotli Extension](https://github.com/kjdev/php-ext-brotli) on Ubuntu/Debian
@@ -8,14 +8,14 @@ The PHP Brotli Extension integrates the brotli compression algorith into PHP and
 provides the functions `brotli_compress` and `brotli_uncompress`. Brotli
 provides moderately improved compression compared to gzip. 
 
-##Requirements##
+## Requirements
 
 - Debian (8+)/Ubuntu(13+)
 - Git. A role such as [geerlingguy.git](https://galaxy.ansible.com/geerlingguy/git/) can supply this.
 - PHP (5.6+)
 - PHP Development headers installed for each PHP version you want to target.
 
-##Role Variables##
+## Role Variables
 
 The following variables are defined in defaults/main.yml. They can be easily
 over-riden by any variables defined basically anywhere else with the same name.
@@ -53,10 +53,10 @@ The path to the phpize binary.
 
 The path to the phpenable binary.
 
-###Debian 8 with PHP 5.6###
+### Debian 8 with PHP 5.6
 The default paths with Debian 8 and PHP 5.6 are different than on Ubuntu and Debian 9. To seamlessly account for this, the main task checks if the generic path doesn't exist. If the path doesn't exist, it imports the variables from `vars/debian.yml`
 
-##Example Playbook##
+## Example Playbook
 
 To  install `brotli` for just your primary PHP version:
 
@@ -76,10 +76,10 @@ To install `brotli` for multiple PHP versions.
       loop_control:
         loop_var: brotli_php_version
 
-##License##
+## License
 
 MIT
 
-##Author Information##
+## Author Information
 
 Nick Wilde ([BriarMoon Design](https://design.briarmoon.ca))
