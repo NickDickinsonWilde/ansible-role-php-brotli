@@ -1,0 +1,21 @@
+---
+# Location to clone brotli to.
+brotli_clone_dest: ~/git/php-brotli
+
+# Whether to enable brotli after installation.
+brotli_enable: true
+
+# path to save brotli.ini
+brotli_path_ini: /etc/php/{{ brotli_php_version }}/mods-available/brotli.ini
+
+#path to php binary
+brotli_path_php: php{{ brotli_php_version }}
+
+#path to php config binary
+brotli_path_phpconfig: php-config{{ brotli_php_version }}
+
+#path to phpize binary
+brotli_path_phpize: phpize{{ brotli_php_version }}
+
+#path to phpenable binary
+brotli_path_phpenable: phpenmod -v {{ brotli_php_version }}

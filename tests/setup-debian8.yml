@@ -1,0 +1,9 @@
+---
+- name: Set variables for Debian.
+  set_fact:
+    php_versions:
+    - 5.6
+
+- name: Install PHP development files
+  apt:
+    name: php5-dev

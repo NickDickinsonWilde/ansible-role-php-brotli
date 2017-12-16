@@ -1,0 +1,100 @@
+---
+- name: Select PHP Version
+  shell: php -v | grep -Po -m 1 "PHP \K[0-9].[0-9]"
+  register: brotli_php_version
+  when: brotli_php_version is undefined
+  changed_when: false
+
+- name: Test path validity for old PHP/Debian combinations.
+  stat:
+    path: '{{ brotli_path_php }}'
+  register: brotli_path_php_stat
+  when:
+  - ansible_distribution == "Debian"
+  - ansible_distribution_major_version == "8"
+  - brotli_php_version|int == 5
+  changed_when: false
+
+- name: Set variables for old PHP/Debian combinations.
+  include_vars: debian.yml
+  when:
+  - ansible_distribution == "Debian"
+  - ansible_distribution_major_version == "8"
+  - brotli_php_version|int == 5
+  - brotli_path_php_stat.stat.exists == false
+  changed_when: false
+
+- name: Get installed version
+  shell: '{{ brotli_path_php}} -i | grep -Po -m 1 "Extension Version => \K[0-9].[0-9].[0-9]"'
+  register: brotli_current_version
+  failed_when: "brotli_current_version.rc == 2"
+  changed_when: false
+
+- name: Select brotli branch for PHP 5.x
+  set_fact:
+    brotli_branch: master
+  when: brotli_php_version|int == 5
+
+- name: Select brotli branch for PHP 7.x
+  set_fact:
+    brotli_branch: feature/php7
+  when: brotli_php_version|int == 7
+
+- name: Clone the brotli repo
+  git:
+    repo: https://github.com/kjdev/php-ext-brotli
+    dest: '{{ brotli_clone_dest }}'
+    version: '{{ brotli_branch}}'
+  changed_when: false
+
+- name: Get latest brotli version string
+  shell: grep -Po -m 1 'BROTLI_EXT_VERSION "\K[0-9].[0-9].[0-9]' php_brotli.h
+  args:
+    chdir: '{{ brotli_clone_dest }}'
+  register: brotli_version
+  changed_when: false
+  when: brotli_current_version
+
+- name: Check if installation needed
+  set_fact:
+    brotli_latest_installed: true
+  when: brotli_current_version.stdout == brotli_version.stdout
+
+- name: Run phpize
+  command: '{{ brotli_path_phpize }}'
+  args:
+    chdir: '{{ brotli_clone_dest }}'
+  changed_when: false
+  when: brotli_latest_installed is undefined
+
+- name: Configure brotli for building
+  shell: './configure --with-php-config={{ brotli_path_phpconfig }}'
+  args:
+    chdir: '{{ brotli_clone_dest }}'
+  changed_when: false
+  when: brotli_latest_installed is undefined
+
+- name: Build brotli
+  make:
+    chdir: '{{ brotli_clone_dest }}'
+    target: install
+  when: brotli_latest_installed is undefined
+
+- name: Remove temporary files
+  file:
+    path: '{{ brotli_clone_dest }}'
+    state: absent
+  changed_when: false
+
+- name: Create brotli.ini
+  copy:
+    content: 'extension=brotli.so'
+    dest: '{{ brotli_path_ini }}'
+  when:
+  - brotli_latest_installed is undefined
+
+- name: Enable brotli
+  command: '{{ brotli_path_phpenable }} brotli'
+  when:
+  - brotli_enable
+  - brotli_latest_installed is undefined

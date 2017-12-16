@@ -1,0 +1,33 @@
+galaxy_info:
+  author: Nick Wilde
+  description: Build and install PHP Brotli extension
+
+  license: MIT
+
+  min_ansible_version: 2.2
+
+  platforms:
+  - name: Debian
+    versions:
+    - stretch
+    - jessie
+  - name: Ubuntu
+    versions:
+    - artful
+    - zesty
+    - yakkety
+    - xenial
+    - wily
+    - vivid
+    - utopic
+    - trusty
+    - saucy
+    - raring
+
+  galaxy_tags:
+  - php
+  - brotli
+  - compression
+  - performance
+  - drupal
+  - advagg

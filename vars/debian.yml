@@ -1,0 +1,6 @@
+---
+brotli_path_ini: /etc/php5/mods-available/brotli.ini
+brotli_path_php: php5
+brotli_path_phpconfig: php-config5
+brotli_path_phpize: phpize5
+brotli_path_phpenable: php5enmod

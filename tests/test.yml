@@ -1,0 +1,27 @@
+---
+- hosts: all
+
+  tasks:
+
+  - include_tasks: setup-ubuntu.yml
+    when: ansible_distribution == "Ubuntu"
+
+  - include_tasks: setup-debian8.yml
+    when:
+    - ansible_distribution == "Debian"
+    - ansible_distribution_major_version == "8"
+
+  - include_tasks: setup-debian9.yml
+    when:
+    - ansible_distribution == "Debian"
+    - ansible_distribution_major_version == "9"
+
+  - name: install git
+    apt:
+      name: git
+
+  - include_role:
+      name: role_under_test
+    with_items: '{{ php_versions }}'
+    loop_control:
+      loop_var: brotli_php_version
