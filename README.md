@@ -1,4 +1,5 @@
 # Ansible Role: PHP Brotli Extension
+[![Build Status](https://travis-ci.org/NickWilde1990/ansible-role-php-brotli.svg?branch=master)](https://travis-ci.org/NickWilde1990/ansible-role-php-brotli)
 
 Build and install the latest version of the
 [PHP Brotli Extension](https://github.com/kjdev/php-ext-brotli) on Ubuntu/Debian
