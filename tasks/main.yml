@@ -30,21 +30,10 @@
   failed_when: "brotli_current_version.rc == 2"
   changed_when: false
 
-- name: Select brotli branch for PHP 5.x
-  set_fact:
-    brotli_branch: master
-  when: brotli_php_version|int == 5
-
-- name: Select brotli branch for PHP 7.x
-  set_fact:
-    brotli_branch: feature/php7
-  when: brotli_php_version|int == 7
-
 - name: Clone the brotli repo
   git:
     repo: https://github.com/kjdev/php-ext-brotli
     dest: '{{ brotli_clone_dest }}'
-    version: '{{ brotli_branch}}'
   changed_when: false
 
 - name: Get latest brotli version string
